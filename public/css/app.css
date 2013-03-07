@@ -1,0 +1,180 @@
+html, body {
+  display: table;
+  height: 100%;
+  min-height: 100%;
+  width: 100%;
+}
+
+body {
+  background: #1a71a6 url(/img/bg.png) no-repeat 0 0;
+  background-size: 100% 100%;
+}
+
+.clearfix:after {
+   content: " "; /* Older browser do not support empty content */
+   visibility: hidden;
+   display: block;
+   height: 0;
+   clear: both;
+}
+
+.wrapper {
+  margin: 0 auto;
+  min-width: 35em;
+  padding: 4em 0;
+  width: 60%;
+}
+
+.wrapper * {
+  color: white;
+  font-family: 'myriad-pro', Helvetica, "Calibri", Arial, sans-serif;
+
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
+h1 {
+  font-size: 2.5em;
+  font-weight: 300;
+  letter-spacing: 2px;
+  text-align: center;
+  text-shadow: 0 3px 10px rgba(0,0,0,.25);
+  text-transform: uppercase;
+}
+
+h2 {
+  font-size: 1.3em;
+}
+
+input[type=text], input[type=text]:focus {
+  border: 1px solid rgba(200, 200, 200, 0.8);
+  border-radius: 2em;
+  color: rgba(150, 150, 150, 0.8);
+  outline: none;
+  padding: .75em 1.5em;
+  width: 95%;
+}
+
+button {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 2em;
+  box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.2);
+  color: rgba(255, 255, 255, 0.6);
+  cursor: pointer;
+  font-size: .5em;
+  line-height: 1.2;
+  padding: 1em 2em;
+  text-transform: uppercase;
+}
+
+button:hover {
+  border-color: rgba(255, 255, 255, 0.8);
+}
+
+button.add, button.remove {
+  border-radius: 9999em;
+  color: white;
+  font-size: 1em;
+  font-weight: 300;
+  height: 2em;
+  line-height: 1;
+  padding: 0;
+  text-transform: none;
+  width: 2em;
+}
+
+button.add {
+  background-color: #008fd5;
+  border: 1px solid #008fd5;
+}
+
+button.remove {
+  background-color: transparent;
+}
+
+header {
+  margin-bottom: 4em;
+  position: relative;
+}
+
+header h1 {
+  font-family: 'omnes-pro', 'gotham rounded', Helvetica, "Calibri", Arial, sans-serif !important;
+}
+
+header .about {
+  left: 0;
+  position: absolute;
+  top: 0em;
+}
+
+header .add, header .remove {
+  display: none;
+  position: absolute;
+  right: 0;
+  top: 0em;
+}
+
+/* Index */
+
+.Index .Jamstagram {
+  float: left;
+  margin-bottom: 2em;
+  text-align: center;
+  width: 25%;
+}
+
+.Index .Jamstagram img {
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.25);
+  margin-bottom: .75em;
+  width: 85%;
+}
+
+.Index .Jamstagram h4, .Index .Jamstagram .creator {
+  line-height: 1.5;
+  text-shadow: 0 2px 5px rgba(0,0,0,.25);
+}
+
+.Index .Jamstagram .creator {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: .8em;
+}
+
+/* Create */
+
+.Create h2 {
+  color: rgba(100, 100, 100, 0.8);
+  margin: 1.5em auto;
+}
+
+.Create h2 span {
+  color: rgba(200, 200, 200, 0.8);
+}
+
+.Create .step {
+  box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
+  display: inline-block;
+  float: left;
+  min-height: 30em;
+  padding: 0 2em;
+  text-align: center;
+  width: 50%;
+}
+
+.Create .step.one {
+  background-color: lightgray;
+}
+
+.Create .step.two {
+  background-color: white;
+}
+
+.Create .step .number {
+  background-color: #008fd5;
+  border-radius: 9999em;
+  height: 3em;
+  line-height: 3em;
+  margin: -1.5em auto 0 auto;
+  width: 3em;
+}
