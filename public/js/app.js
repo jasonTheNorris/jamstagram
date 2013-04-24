@@ -1,13 +1,22 @@
 (function() {
 
   var J = {
+    Templates: {},
+    Utils: {},
     Models: {},
     Views: {},
-    Utils: {}
+    INSTAGRAM_KEY: 'a8d683aca6dd4263b5bc0bf04ba5d6ec'
+  };
+
+  // Utils
+  J.Utils.getQueryString = function(args) {
+    return _.map(args, function(v, k) {
+      return encodeURIComponent(k) + '=' + encodeURIComponent(v);
+    }).join('&');
   };
 
   // Models
-  J.Models.JamstagramCollections = Backbone.Collection.extend({
+  J.Models.JamstagramCollection = Backbone.Collection.extend({
     model: Backbone.Model,
     url: '/api/jamstagrams'
   });
@@ -17,7 +26,7 @@
     className: 'Index clearfix',
     render: function() {
       J.app.setHeaderButtonState('add');
-      this.$el.html(ich.index({ jamstagrams: this.model.toJSON() }));
+      this.$el.html(J.Templates.index.render({ jamstagrams: this.model.toJSON() }));
       return this;
     }
   });
@@ -26,7 +35,7 @@
     className: 'Create clearfix',
     render: function() {
       J.app.setHeaderButtonState('remove');
-      this.$el.html(ich.create({ songsLeftText: '5 songs left' }));
+      this.$el.html(J.Templates.create.render({ songsLeftText: '5 songs left' }));
       return this;
     } 
   });
@@ -37,7 +46,7 @@
 
     $.getJSON('/api/templates', function(data) {
       _.each(data, function(template, name) {
-        ich.addTemplate(name, template);
+        J.Templates[name] = Hogan.compile(template);
       });
       self.init();
     });
@@ -53,7 +62,7 @@
       },
 
       index: function() {
-        var model = new J.Models.JamstagramCollections();
+        var model = new J.Models.JamstagramCollection();
         var view = new J.Views.Index({
           model: model
         });
