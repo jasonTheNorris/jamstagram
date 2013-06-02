@@ -1,10 +1,9 @@
 require 'rubygems'
+require 'debugger'
 require 'sinatra'
 require 'json'
 require 'rdio'
-
-RDIO_CONSUMER_KEY = '435qy2pjcjy3r8ysf74u5fxd'
-RDIO_CONSUMER_SECRET = 'jEr5MTRxRt'
+require './models/models'
 
 get '/api/templates' do
   content_type :json
