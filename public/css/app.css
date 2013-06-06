@@ -20,9 +20,8 @@ body {
 
 .wrapper {
   margin: 0 auto;
-  min-width: 35em;
   padding: 4em 0;
-  width: 60%;
+  width: 64em;
 }
 
 .wrapper * {
@@ -156,10 +155,11 @@ header .add, header .remove {
   box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
   display: inline-block;
   float: left;
-  min-height: 30em;
+  height: 32em;
   padding: 0 2em;
+  position: relative;
   text-align: center;
-  width: 50%;
+  width: 32em;
 }
 
 .Create .step.one {
@@ -176,5 +176,29 @@ header .add, header .remove {
   height: 3em;
   line-height: 3em;
   margin: -1.5em auto 0 auto;
+  position: relative;
   width: 3em;
+  z-index: 2;
+}
+
+.Create .step.one .instagram-results {
+  height: 20em;
+  margin-top: 1em;
+  overflow-y: scroll;
+}
+
+.Create .step.one .instagram-results img {
+  box-shadow: 0px 3px 10px rgba(0, 0, 0, 0.25);
+  cursor: pointer;
+  margin: 0.5em;
+  width: 20%;
+}
+
+.Create .step.one .photo-shield {
+  display: none;
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
 }
