@@ -1,0 +1,54 @@
+.Rdio .tracks {
+  overflow: scroll;
+  border-top: 1px solid #e6e7e9;
+  margin: 3em -2em 1.5em;
+  padding: 0;
+}
+
+.Rdio .clear {
+  position: absolute;
+  right: 3em;
+  top: 1em;
+  text-decoration: none;
+  display: none;
+}
+
+.Rdio .search-overlay {
+  position: relative;
+}
+
+.Rdio.empty .tracks,
+.Rdio.searching .tracks {
+  display: none;
+}
+
+.Rdio .suggestions {
+  display: none;
+  margin: -1em -2em 0;
+  max-height: 20.5em;
+  overflow: scroll;
+}
+
+.Rdio .suggestions :last-child {
+  border-bottom: none;
+}
+
+.Rdio.searching .clear {
+  display: block;
+}
+
+.Rdio.searching .suggestions {
+  display: block;
+}
+
+.Rdio.searching .search-container {
+  overflow: hidden;
+  margin: 0 -2em;
+  padding: 0 0 1em;
+}
+
+.Rdio.searching .search-overlay {
+  padding: 0 2em 2em;
+  border-bottom: 1px solid #e1e1e1;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}

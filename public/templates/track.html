@@ -1,4 +1,9 @@
-<span class="name">{{ name }}</span>
-<span class="artist">{{ artist }}</span>
-<span class="duration">{{ duration }}</span>
-<img src="{{ icon }}" alt="{{ name }}" width="38" height="38">
+{{#index}}
+  <div class="index">{{ index }}</div>
+{{/index}}
+<img src="{{ icon }}" alt="{{ name }}" class="icon" width="38" height="38">
+<div class="meta">
+  <div class="name">{{ name }}</div>
+  <div class="artist">{{ artist }}</div>
+</div>
+<div class="duration">{{ duration }}</div>

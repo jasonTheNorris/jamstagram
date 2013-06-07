@@ -1,7 +1,50 @@
 .Track {
-  height: 70px;
+  color: #a8a8ab;
+  overflow: hidden;
+  font-size: 14px;
+  line-height: 19px;
+  padding: 15px;
+  border-bottom: 1px solid #e6e7e9;
+}
+
+.Track.selectable {
+  cursor: pointer;
+}
+
+.Track.selected:hover .handle,
+.Track.selected:hover .remove {
+  display: block;
+}
+
+.Track .meta {
+  float: left;
+  text-align: left;
 }
 
 .Track .name {
   color: #4c5053;
+}
+
+.Track .artist {
+  color: #a8a8ab;
+}
+
+.Track .icon {
+  float: left;
+  margin: 0 10px 0 0;
+}
+
+.Track .duration {
+  float: right;
+  color: #a8a8ab;
+  line-height: 38px;
+  text-align: right;
+  padding: 0 10px 0 20px;
+}
+
+.Track .index {
+  float: left;
+  color: #a8a8ab;
+  padding: 0 20px 0 15px;
+  line-height: 38px;
 }
