@@ -39,7 +39,9 @@
   J.Views.Index = Backbone.View.extend({
     className: 'Index clearfix',
     render: function() {
-      J.app.setHeaderButtonState('add');
+      R.ready(function() {
+        J.app.setHeaderButtonState('add');
+      });
       this.$el.html(J.Templates.index.render({ jamstagrams: this.model.toJSON() }));
       return this;
     }
@@ -54,9 +56,16 @@
       'click .photo-shield': 'onPhotoShieldClicked'
     },
 
+    initialize: function() {
+      this.rdio = new J.Views.Rdio({
+        el: this.$('.two').get(0)
+      });
+    },
+
     render: function() {
       J.app.setHeaderButtonState('remove');
-      this.$el.html(J.Templates.create.render({ songsLeftText: '5 songs left' }));
+      this.$el.html(J.Templates.create.render());
+      this.$('.step.two').append(this.rdio.render().el);
       return this;
     },
 
@@ -152,6 +161,11 @@
       },
 
       create: function(step) {
+        if (!R.authenticated()) {
+          self.router.navigate('', { trigger: true });
+          return;
+        }
+
         var view = new J.Views.Create();
         self.renderContent(view);
       },
@@ -164,9 +178,20 @@
     this.$content = $('#content');
 
     this.$headerAdd.click(function() {
-      self.setHeaderButtonState('remove');
-      self.router.navigate('create', { trigger: true });
+      if (!R.authenticated()) {
+        R.authenticate({
+          model: 'redirect',
+          complete: function() {
+            self.setHeaderButtonState('remove');
+            self.router.navigate('create', { trigger: true });
+          }
+        });
+      } else {
+        self.setHeaderButtonState('remove');
+        self.router.navigate('create', { trigger: true });
+      }
     });
+
     this.$headerRemove.click(function() {
       self.setHeaderButtonState('add');
       self.router.navigate('', { trigger: true });
@@ -193,5 +218,7 @@
   };
 
   J.app = new J.App();
+
+  window.J = J;
 
 })();
