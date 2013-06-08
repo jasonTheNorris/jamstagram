@@ -1,35 +1,129 @@
 (function() {
   J.Views.Rdio = Backbone.View.extend({
-    className: 'Rdio clearfix',
+    className: 'Rdio empty clearfix',
 
     events: {
-      'keyup .search': 'onSearch'
+      'keyup .search': 'onSearch',
+      'focus .search': 'onFocusSearch',
+      'click .clear': 'onClearSearch'
     },
+
+    maxSongCount: 5,
 
     initialize: function() {
       _.bindAll(this);
-      this.children = [];
+      this.suggestionViews = [];
+      this.suggestions = new Backbone.Collection();
+      this.model.on('add', this.onTrackAdded);
+      this.model.on('change:index', this.onTrackReorder);
     },
 
     render: function() {
       this.$el.html(J.Templates.rdio.render());
       this.$search = this.$('.search');
       this.$tracks = this.$('.tracks');
+      this.$suggestions = this.$('.suggestions');
+      this.$remaining = this.$('.songs-left');
+      this.updateSongText();
       return this;
     },
 
-    onSearchResults: function(response) {
-      this.model = new Backbone.Collection(response.result);
-      _.each(this.children, function(child) {
+    updateSongText: function() {
+      this.$remaining.text((this.maxSongCount - this.model.length) + ' songs to go.');
+    },
+
+    clearSearchResults: function() {
+      this.suggestions.reset();
+      _.each(this.suggestionViews, function(child) {
         child.remove();
       });
-      this.children = this.model.map(function(model) {
+    },
+
+    onSearchResults: function(response) {
+      this.clearSearchResults();
+
+      this.suggestions.reset(response.result.slice(0, 5));
+      this.suggestionViews = this.suggestions.map(function(suggestion) {
         var child = new J.Views.Track({
-          model: model
+          model: suggestion
         });
-        this.$tracks.append(child.render().el);
+        child.on('selected', this.onTrackSelected);
+        this.$suggestions.append(child.render().el);
         return child;
       }, this);
+    },
+
+    onTrackAdded: function(track, tracks, options) {
+      var child = new J.Views.Track({
+        selected: true,
+        model: track
+      });
+      child.on('remove', this.onTrackRemoved);
+      child.on('drop', this.onTrackDropped);
+      this.$tracks.append(child.render().el);
+      this.$el.removeClass('empty');
+      this.onClearSearch(new $.Event());
+      this.updateSongText();
+    },
+
+    onTrackDropped: function(from, to) {
+      var fromModel = this.model.findWhere({ index: from });
+      var toModel = this.model.findWhere({ index: to });
+      if (fromModel && toModel) {
+        fromModel.set('index', to, { silent: true });
+        toModel.set('index', from);
+      }
+    },
+
+    onTrackReorder: function(model, value, options) {
+      var from = model.get('index');
+      var to = model.previous('index');
+      var $tracks = this.$tracks.children('li');
+      var $track = $tracks.eq(from - 1);
+      var $next = $tracks.eq(to - 1);
+      if (from > to) {
+        $track.insertBefore($next);
+      } else {
+        $track.insertAfter($next);
+      }
+    },
+
+    onTrackRemoved: function(track) {
+      this.model.remove(track.model);
+      track.remove();
+      if (!this.model.length) {
+        this.$el.addClass('empty');
+      }
+    },
+
+    onFinished: function() {
+      this.trigger('done');
+    },
+
+    onTrackSelected: function(track) {
+      if (this.model.length < this.maxSongCount) {
+        var attributes = track.model.toJSON();
+        _.extend(attributes, {
+          index: this.model.length + 1
+        });
+        this.model.add(attributes);
+
+        if (this.model.length === this.maxSongCount) {
+          this.onFinished();
+        }
+      }
+    },
+
+    onFocusSearch: function() {
+      this.$el.addClass('searching');
+    },
+
+    onClearSearch: function(e) {
+      e.preventDefault();
+      this.$search.val('');
+      this.$search.blur();
+      this.$el.removeClass('searching');
+      this.clearSearchResults();
     },
 
     onSearch: _.debounce(function(e) {
@@ -41,6 +135,7 @@
       if (query === this._prevQuery) {
         return;
       }
+
       this._prevQuery = query;
 
       R.request({
@@ -55,6 +150,6 @@
           throw new Error(response.message);
         }
       });
-    }, 500)
+    }, 250)
   });
 })();

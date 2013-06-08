@@ -1,4 +1,14 @@
-@import('track.css');
+@import 'rdio.css';
+@import 'track.css';
+
+[draggable] {
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -khtml-user-drag: element;
+  -webkit-user-drag: element;
+}
 
 html, body {
   display: table;
@@ -10,6 +20,9 @@ html, body {
 body {
   background: #1a71a6 url(/img/bg.png) no-repeat 0 0;
   background-size: 100% 100%;
+  color: white;
+  font-family: 'myriad-pro', Helvetica, "Calibri", Arial, sans-serif;
+  text-rendering: optimizeLegibility;
 }
 
 .clearfix:after {
@@ -27,9 +40,6 @@ body {
 }
 
 .wrapper * {
-  color: white;
-  font-family: 'myriad-pro', Helvetica, "Calibri", Arial, sans-serif;
-
   -moz-box-sizing: border-box;
   -webkit-box-sizing: border-box;
   box-sizing: border-box;
@@ -54,7 +64,8 @@ input[type=text], input[type=text]:focus {
   color: rgba(150, 150, 150, 0.8);
   outline: none;
   padding: .75em 1.5em;
-  width: 95%;
+  width: 100%;
+  font-size: 0.85em;
 }
 
 button {

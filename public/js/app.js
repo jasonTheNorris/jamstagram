@@ -29,6 +29,21 @@
     });
   };
 
+  J.Utils.formatDuration = function(duration) {
+    var hours = Math.floor(duration / (60 * 60));
+    var minutes = Math.floor((duration - (hours * 60 * 60)) / 60);
+    var seconds = duration - (hours * 60 * 60) - (minutes * 60);
+    if (!seconds) {
+      seconds = "00";
+    } else if (seconds < 10) {
+      seconds = "0" + seconds;
+    }
+    if (!minutes) {
+      minutes = "0";
+    }
+    return _.compact([hours, minutes, seconds]).join(':');
+  };
+
   // Models
   J.Models.JamstagramCollection = Backbone.Collection.extend({
     model: Backbone.Model,
@@ -58,6 +73,7 @@
 
     initialize: function() {
       this.rdio = new J.Views.Rdio({
+        model: new Backbone.Collection(),
         el: this.$('.two').get(0)
       });
     },
