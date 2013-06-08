@@ -1,17 +1,46 @@
 .Track {
+  background: white;
   color: #a8a8ab;
   overflow: hidden;
   font-size: 14px;
   line-height: 19px;
   padding: 15px;
   border-bottom: 1px solid #e6e7e9;
-}
-
-.Track.selectable {
   cursor: pointer;
 }
 
-.Track.selected:hover .handle,
+.Track.selected:hover {
+  background: #f7f8fa;
+}
+
+.Track.selected:hover .index,
+.Track.selected:hover .duration {
+  display: none;
+}
+
+.Track .handle,
+.Track .remove {
+  display: none;
+}
+
+.Track .handle {
+  float: left;
+  padding: 0 25px 0 10px;
+  line-height: 38px;
+}
+
+.Track .remove {
+  float: right;
+  line-height: 38px;
+  text-align: right;
+  padding: 0 10px 0 20px;
+}
+
+.Track.dragging {
+  opacity: 0.4;
+}
+
+.Track.selected.draggable:hover .handle,
 .Track.selected:hover .remove {
   display: block;
 }
@@ -45,6 +74,6 @@
 .Track .index {
   float: left;
   color: #a8a8ab;
-  padding: 0 20px 0 15px;
+  padding: 0 25px 0 10px;
   line-height: 38px;
 }

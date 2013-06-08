@@ -15,6 +15,7 @@
       this.suggestionViews = [];
       this.suggestions = new Backbone.Collection();
       this.model.on('add', this.onTrackAdded);
+      this.model.on('change:index', this.onTrackReorder);
     },
 
     render: function() {
@@ -44,10 +45,9 @@
       this.suggestions.reset(response.result.slice(0, 5));
       this.suggestionViews = this.suggestions.map(function(suggestion) {
         var child = new J.Views.Track({
-          selectable: true,
           model: suggestion
         });
-        child.on('selected', this.onSelection);
+        child.on('selected', this.onTrackSelected);
         this.$suggestions.append(child.render().el);
         return child;
       }, this);
@@ -55,20 +55,63 @@
 
     onTrackAdded: function(track, tracks, options) {
       var child = new J.Views.Track({
+        selected: true,
         model: track
       });
+      child.on('remove', this.onTrackRemoved);
+      child.on('drop', this.onTrackDropped);
       this.$tracks.append(child.render().el);
       this.$el.removeClass('empty');
       this.onClearSearch(new $.Event());
       this.updateSongText();
     },
 
-    onSelection: function(track) {
-      var attributes = track.toJSON();
-      _.extend(attributes, {
-        index: this.model.length + 1
-      });
-      this.model.add(attributes);
+    onTrackDropped: function(from, to) {
+      var fromModel = this.model.findWhere({ index: from });
+      var toModel = this.model.findWhere({ index: to });
+      if (fromModel && toModel) {
+        fromModel.set('index', to, { silent: true });
+        toModel.set('index', from);
+      }
+    },
+
+    onTrackReorder: function(model, value, options) {
+      var from = model.get('index');
+      var to = model.previous('index');
+      var $tracks = this.$tracks.children('li');
+      var $track = $tracks.eq(from - 1);
+      var $next = $tracks.eq(to - 1);
+      if (from > to) {
+        $track.insertBefore($next);
+      } else {
+        $track.insertAfter($next);
+      }
+    },
+
+    onTrackRemoved: function(track) {
+      this.model.remove(track.model);
+      track.remove();
+      if (!this.model.length) {
+        this.$el.addClass('empty');
+      }
+    },
+
+    onFinished: function() {
+      this.trigger('done');
+    },
+
+    onTrackSelected: function(track) {
+      if (this.model.length < this.maxSongCount) {
+        var attributes = track.model.toJSON();
+        _.extend(attributes, {
+          index: this.model.length + 1
+        });
+        this.model.add(attributes);
+
+        if (this.model.length === this.maxSongCount) {
+          this.onFinished();
+        }
+      }
     },
 
     onFocusSearch: function() {
