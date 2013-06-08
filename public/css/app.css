@@ -176,6 +176,8 @@ header .add, header .remove {
 }
 
 .Create .step.one {
+  background-image: url('/img/ig_placeholder.png');
+  background-size: 100%;
   background-color: lightgray;
 }
 
@@ -216,6 +218,21 @@ header .add, header .remove {
   width: 100%;
 }
 
+.Create .step.one .photo-shield img {
+  height: 100%;
+  left: 0;
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+.Create .step.one .photo-shield .controls {
+  bottom: 1em;
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  z-index: 2;
+}
 /* Share */
 
 .Share {
