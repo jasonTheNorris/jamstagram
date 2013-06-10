@@ -10,6 +10,8 @@
 
     maxSongCount: 5,
 
+    _complete: false,
+
     initialize: function() {
       _.bindAll(this);
       this.suggestionViews = [];
@@ -29,7 +31,9 @@
     },
 
     updateSongText: function() {
-      this.$remaining.text((this.maxSongCount - this.model.length) + ' songs to go.');
+      var count = this.maxSongCount - this.model.length;
+      var songText = count === 1 ? 'song' : 'songs';
+      this.$remaining.text(count + ' ' + songText + ' to go.');
     },
 
     clearSearchResults: function() {
@@ -92,13 +96,33 @@
     onTrackRemoved: function(track) {
       this.model.remove(track.model);
       track.remove();
+
       if (!this.model.length) {
         this.$el.addClass('empty');
       }
+
+      if (this.model.length < this.maxSongCount) {
+        this.$('h2.complete').hide();
+        this.$('h2.incomplete').show();
+        this.$('.number').removeClass('complete');
+        this.$search.fadeIn();
+        this._complete = false;
+      }
+
+      this.updateSongText();
     },
 
     onFinished: function() {
-      this.trigger('done');
+      this.$search.hide();
+      this.$('.number').addClass('complete');
+      this.$('h2.incomplete').hide();
+      this.$('h2.complete').show();
+      this._complete = true;
+      this.trigger('complete');
+    },
+
+    isComplete: function() {
+      return this._complete();
     },
 
     onTrackSelected: function(track) {

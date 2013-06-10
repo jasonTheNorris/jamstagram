@@ -16,17 +16,71 @@
     }).join('&');
   };
 
-  J.Utils.instagramRequest = function(path, args, method) {
-    var args = _.defaults({
-      client_id: J.INSTAGRAM_CLIENT_ID
-    }, args);
-    var url = J.INSTAGRAM_BASE_URL + path + J.Utils.buildQueryString(args);
+  J.Utils.setInstagramAccessToken = function(token) {
+    $.cookie('ig_token', token, { path: '/' });
+    $(J.app).trigger('auth:instagram');
+  };
 
-    return $.ajax({
+  J.Utils.instagramRequest = function(path, args, method) {    
+    var buildUrl = function() {
+      args = args || {};
+      var accessToken = $.cookie('ig_token');
+
+      if (accessToken) {
+        args.access_token = accessToken;
+      } else {
+        args.client_id = J.INSTAGRAM_CLIENT_ID;
+      }
+    
+      return J.INSTAGRAM_BASE_URL + path + J.Utils.buildQueryString(args);
+    };
+
+    var url = buildUrl();
+    var deferred = $.Deferred();
+    var requestArgs = {
       type: method || 'get',
       dataType: 'jsonp',
       url: url
+    };
+
+    $.ajax(requestArgs).success(function(response) {
+      if (response.meta.code === 200) {
+        deferred.resolve(response);
+      } else if (response.meta.error_type === 'OAuthAccessTokenException') {
+        J.Utils.authInstagram(true).done(function() {
+          requestArgs.url = buildUrl();
+          $.ajax(requestArgs).success(function(response) {
+            deferred.resolve(response);
+          });
+        });
+      }
     });
+
+    return deferred;
+  };
+
+  J.Utils.authInstagram = function(forceAuth) {
+    var deferred = $.Deferred();
+    var accessToken = $.cookie('ig_token');
+
+    if (accessToken && !forceAuth) {
+      deferred.resolve();
+    } else {
+      var authUrl = [
+        'https://instagram.com/oauth/authorize/?client_id=',
+        J.INSTAGRAM_CLIENT_ID,
+        '&redirect_uri=',
+        encodeURIComponent('http://local.jamstagr.am:4567/#create'),
+        '&response_type=token'
+      ].join('');
+      var authWindow = window.open(authUrl, 'instagramAuth', "height=650,width=650");
+      $(J.app).one('auth:instagram', function() {
+        authWindow.close();
+        deferred.resolve();
+      });
+    }
+
+    return deferred;
   };
 
   J.Utils.formatDuration = function(duration) {
@@ -65,80 +119,24 @@
   J.Views.Create = Backbone.View.extend({
     className: 'Create clearfix',
 
-    events: {
-      'keyup .instagram-search': 'onInstagramSearchKepUp',
-      'click .instagram-results img': 'onInstagramResultClicked',
-      'click .photo-shield': 'onPhotoShieldClicked'
-    },
-
     initialize: function() {
+      this.instagram = new J.Views.Instagram({
+        model: new Backbone.Model(),
+        el: this.$('.step.one').get(0)
+      });
       this.rdio = new J.Views.Rdio({
         model: new Backbone.Collection(),
-        el: this.$('.two').get(0)
+        el: this.$('.step.two').get(0)
       });
     },
 
     render: function() {
       J.app.setHeaderButtonState('remove');
       this.$el.html(J.Templates.create.render());
+      this.$('.step.one').append(this.instagram.render().el);
       this.$('.step.two').append(this.rdio.render().el);
       return this;
     },
-
-    onInstagramSearchKepUp: function(e) {
-      if (e.keyCode !== 13) {
-        return;
-      }
-
-      var self = this;
-      var query = $(e.currentTarget).val();
-
-      if (query.charAt(0) === '@') {
-        console.error('IMPLEMENT INSTAGRAM AUTHENTICATION, DUMMY!')
-        // request = J.Utils.instagramRequest('/users/search/', {
-        //   q: query.slice(1)
-        // });
-        // request.success(function(response) {
-        //   if (response.data) {
-        //     var userId = response.data[0].id;
-        //     path = '/users/' + userId + '/media/recent/';
-
-        //     request = J.Utils.instagramRequest(path);
-        //     request.success(function(response) {
-        //       if (response.data) {
-        //         console.log(response.data);
-        //       }
-        //     });
-        //   }
-        // });
-      } else {
-        var path = '/tags/' + query.replace(/^#/, '') + '/media/recent';
-        J.Utils.instagramRequest(path).success(function(response) {
-          var data = _.map(response.data, function(photo) {
-            return {
-              src: photo.images.thumbnail.url,
-              big_src: photo.images.standard_resolution.url,
-              id: photo.id
-            };
-          });
-          var photoGrid = J.Templates.photoGrid.render({ photos: data });
-          self.$('.instagram-results').html(photoGrid);
-        });
-      }
-    },
-
-    onInstagramResultClicked: function(e) {
-      var src = $(e.currentTarget).attr('data-big-src');
-      var $shield = this.$('.photo-shield');
-      $shield.one('load', function() {
-        $shield.fadeIn();
-      });
-      $shield.attr('src', src);
-    },
-
-    onPhotoShieldClicked: function(e) {
-      $(e.currentTarget).fadeOut();
-    }
   });
 
   // App
@@ -159,7 +157,8 @@
     var Router = Backbone.Router.extend({
       routes: {
         '': 'index',
-        'create': 'create'
+        'create': 'create',
+        'access_token=*token': 'instagram_auth'
       },
 
       index: function() {
@@ -168,15 +167,14 @@
           model: model
         });
 
-        model.on('reset', function() {
+        model.on('sync', function() {
           self.renderContent(view);
         });
         model.fetch();
-
         self.renderContent(view);
       },
 
-      create: function(step) {
+      create: function() {
         if (!R.authenticated()) {
           self.router.navigate('', { trigger: true });
           return;
@@ -185,13 +183,22 @@
         var view = new J.Views.Create();
         self.renderContent(view);
       },
+
+      instagram_auth: function(token) {
+        window.opener.J.Utils.setInstagramAccessToken(token);
+      }
     });
 
     this.router = new Router();
     
+    this.$titleHeader = $('h1');
     this.$headerAdd = $('header .add');
     this.$headerRemove = $('header .remove');
     this.$content = $('#content');
+
+    this.$titleHeader.click(function() {
+      self.router.navigate('', { trigger: true });
+    });
 
     this.$headerAdd.click(function() {
       if (!R.authenticated()) {
@@ -218,7 +225,7 @@
 
   J.App.prototype.renderContent = function(view) {
     var $content = this.$content;
-    $content.fadeOut('fase', function() {
+    $content.fadeOut('fast', function() {
       $content.html(view.render().el).fadeIn();
     });
   };

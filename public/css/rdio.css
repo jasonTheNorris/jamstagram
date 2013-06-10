@@ -1,3 +1,11 @@
+.Rdio h2.complete {
+  display: none;
+}
+
+.Rdio h2 .songs-left {
+  margin-left: 5px;
+}
+
 .Rdio .tracks {
   overflow: scroll;
   border-top: 1px solid #e6e7e9;
