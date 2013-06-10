@@ -4,7 +4,7 @@
   overflow: hidden;
   font-size: 14px;
   line-height: 19px;
-  padding: 15px;
+  padding: 19.2px 15px;
   border-bottom: 1px solid #e6e7e9;
   cursor: pointer;
 }
@@ -26,13 +26,6 @@
   margin: 6px 0;
 }
 
-.Track .handle {
-  float: left;
-  background: url('/img/icon_move.png') no-repeat;
-  padding: 0 25px 0 17px;
-  line-height: 38px;
-}
-
 .Track .remove {
   float: right;
   background: url('/img/icon_remove.png') no-repeat;
@@ -45,7 +38,20 @@
   opacity: 0.4;
 }
 
-.Track.selected.draggable:hover .handle,
+.Track.suggestion {
+  background-image: url('/img/icon_plus_blue.png');
+  background-position: 17px center;
+  background-repeat: no-repeat;
+  padding-left: 60px;
+}
+
+.Track.selected.draggable:hover {
+  background-image: url('/img/icon_move.png');
+  background-position: 17px center;
+  background-repeat: no-repeat;
+  padding-left: 60px;
+}
+
 .Track.selected:hover .remove {
   display: block;
 }
@@ -79,6 +85,8 @@
 .Track .index {
   float: left;
   color: #a8a8ab;
-  padding: 0 25px 0 10px;
+  padding: 0 15px 0 2px;
+  width: 45px;
   line-height: 38px;
+  text-align: center;
 }

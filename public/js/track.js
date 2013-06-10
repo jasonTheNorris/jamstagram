@@ -58,6 +58,8 @@
           this.$el.attr('draggable', true);
           this.$el.addClass('draggable');
         }
+      } else {
+        this.$el.addClass('suggestion');
       }
     },
 
