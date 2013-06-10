@@ -162,9 +162,22 @@
   J.Views.View = Backbone.View.extend({
     className: 'View clearfix',
 
+    events: {
+      'click .play': 'onPlayClicked'
+    },
+
     initialize: function() {
       _.bindAll(this);
       this.model.on('change:tracks', this.onTracksLoaded);
+    },
+
+    onPlayClicked: function(e) {
+      e.preventDefault();
+      R.player.queue.clear();
+      _.each(this.model.get('tracks'), function(track) {
+        R.player.queue.add(track.key);
+      });
+      R.player.queue.play();
     },
 
     onTracksLoaded: function() {
@@ -266,7 +279,6 @@
         var model = new J.Models.Jamstagram();
         model.on('sync', function() {
           var keys = model.get('tracks');
-          console.warn(keys);
           R.request({
             method: 'get',
             content: {
