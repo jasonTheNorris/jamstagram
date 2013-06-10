@@ -147,7 +147,18 @@
     className: 'View clearfix',
 
     initialize: function() {
-      console.warn(this.model);
+      _.bindAll(this);
+      this.model.on('change:tracks', this.onTracksLoaded);
+    },
+
+    onTracksLoaded: function() {
+      _.each(this.model.get('tracks'), function(model) {
+        var child = new J.Views.Track({
+          playable: true,
+          model: new Backbone.Model(model)
+        });
+        this.$('.tracks').append(child.render().el);
+      }, this);
     },
 
     render: function() {
@@ -183,6 +194,17 @@
       view: function() {
         var model = new J.Models.Jamstagram();
         model.on('sync', function() {
+          var keys = model.get('tracks');
+          console.warn(keys);
+          R.request({
+            method: 'get',
+            content: {
+              keys: keys
+            },
+            success: function(response) {
+              model.set('tracks', _.values(response.result));
+            }
+          });
           var view = new J.Views.View({
             model: model
           });

@@ -9,6 +9,10 @@
   cursor: pointer;
 }
 
+.Track.playable {
+  cursor: default;
+}
+
 .Track.selected:hover {
   background: #f7f8fa;
 }
