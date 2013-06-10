@@ -156,6 +156,25 @@
       this.$('.step.one').append(this.instagram.render().el);
       this.$('.step.two').append(this.rdio.render().el);
       return this;
+    }
+  });
+
+  J.Views.View = Backbone.View.extend({
+    className: 'View clearfix',
+
+    initialize: function() {
+      _.bindAll(this);
+      this.model.on('change:tracks', this.onTracksLoaded);
+    },
+
+    onTracksLoaded: function() {
+      _.each(this.model.get('tracks'), function(model) {
+        var child = new J.Views.Track({
+          playable: true,
+          model: new Backbone.Model(model)
+        });
+        this.$('.tracks').append(child.render().el);
+      }, this);
     },
 
     onStepComplete: function() {
@@ -246,6 +265,17 @@
       view: function() {
         var model = new J.Models.Jamstagram();
         model.on('sync', function() {
+          var keys = model.get('tracks');
+          console.warn(keys);
+          R.request({
+            method: 'get',
+            content: {
+              keys: keys
+            },
+            success: function(response) {
+              model.set('tracks', _.values(response.result));
+            }
+          });
           var view = new J.Views.View({
             model: model
           });

@@ -58,8 +58,10 @@
           this.$el.attr('draggable', true);
           this.$el.addClass('draggable');
         }
-      } else {
+      } else if (!options.playable) {
         this.$el.addClass('suggestion');
+      } else if (options.playable) {
+        this.$el.addClass('playable');
       }
     },
 
