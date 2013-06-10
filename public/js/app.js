@@ -99,6 +99,9 @@
   };
 
   // Models
+  J.Models.Jamstagram = Backbone.Model.extend({
+  });
+
   J.Models.JamstagramCollection = Backbone.Collection.extend({
     model: Backbone.Model,
     url: '/api/jamstagrams'
@@ -120,10 +123,14 @@
     className: 'Create clearfix',
 
     events: {
-      'click .complete-dialog .close': 'hideCompleteDialog'
+      'click .complete-dialog .close': 'hideCompleteDialog',
+      'submit .complete-dialog form': 'onCompleteDialogFormSubmit',
+      'click .complete': 'showCompleteDialog'
     },
 
     initialize: function() {
+      this.model = new J.Models.Jamstagram();
+
       this.instagram = new J.Views.Instagram({
         model: new Backbone.Model(),
         el: this.$('.step.one').get(0)
@@ -149,17 +156,47 @@
 
     onStepComplete: function() {
       if (this.rdio.isComplete() && this.instagram.isComplete()) {
-        this.showCompleteDialog();
+        this.$('button.complete').fadeIn();
       }
     },
 
+    onCompleteDialogFormSubmit: function(e) {
+      e.preventDefault();
+
+      var $form = $(e.currentTarget);
+      var photo = this.instagram.model;
+      var tracks = this.rdio.model;
+
+      // this.model.set({
+      //   userId: photo.get('user').id + '+' + R.currentUser.get('key'),
+      //   userName: R.currentUser.get('firstName') + ' ' + R.currentUser.get('lastName'),
+      //   userInstagramName: photo.get('user').username,
+      //   name: $form.find('[name=name]').val(),
+      //   description: $form.find('[name=description]').val(),
+      //   photoSrc: photo.get('images').standard_resolution.url,
+      //   trackKeys: tracks.pick('key')
+      // });
+
+      // this.model.save();
+    },
+
+    getDefaultText: function() {
+      var username = this.instagram.model.get('user').username;
+      return 'photo by @' + username + ' — http://jasmstagr.am/1234';
+    },
+
     showCompleteDialog: function() {
+      this.$('.complete-dialog').find('[name=description]').val(this.getDefaultText());
+      J.app.hideHeaderButtons();
+      this.$('button.complete').fadeOut();
       this.$('.step .number').fadeOut();
       this.$('.complete-dialog').fadeIn();
     },
 
     hideCompleteDialog: function() {
+      J.app.showHeaderButtons();
       this.$('.complete-dialog').fadeOut();
+      this.$('button.complete').fadeIn();
       this.$('.step .number').fadeIn();
     }
   });
@@ -217,6 +254,7 @@
     this.router = new Router();
     
     this.$titleHeader = $('h1');
+    this.$headerAbout = $('header .about');
     this.$headerAdd = $('header .add');
     this.$headerRemove = $('header .remove');
     this.$content = $('#content');
@@ -263,6 +301,16 @@
       this.$headerAdd.fadeOut();
       this.$headerRemove.fadeIn();
     }
+  };
+
+  J.App.prototype.hideHeaderButtons = function() {
+    this.$headerRemove.fadeOut();
+    this.$headerAbout.fadeOut();
+  };
+
+  J.App.prototype.showHeaderButtons = function() {
+    this.$headerRemove.fadeIn();
+    this.$headerAbout.fadeIn();
   };
 
   J.app = new J.App();

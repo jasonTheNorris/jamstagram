@@ -91,12 +91,17 @@
     onPhotoShieldSelectClicked: function() {
       this.$('.photo-shield .controls').fadeOut();
       this.$('.number').addClass('complete');
+
+      var selectedPhoto = this.photos.at(this.currentPhotoIndex);
+      this.model.set(selectedPhoto.toJSON());
+
       this._complete = true;
       this.trigger('complete');
     },
 
     onPhotoShieldRemoveClicked: function() {
       if (this._complete) {
+        this.model.clear();
         this._complete = false;
         this.$('.number').removeClass('complete');
         this.$('.photo-shield .controls').fadeIn();

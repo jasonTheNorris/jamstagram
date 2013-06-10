@@ -62,8 +62,8 @@ h2 {
 
 input[type=text],
 input[type=text]:focus,
-input[type=textarea],
-input[type=textarea]:focus {
+textarea,
+textarea:focus {
   border: 1px solid rgba(200, 200, 200, 0.8);
   border-radius: 2em;
   color: rgba(150, 150, 150, 0.8);
@@ -211,6 +211,20 @@ header .add, header .remove {
   color: transparent;
 }
 
+.Create button.complete {
+  background-image: url('/img/icon_check_green_48.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+  border: none;
+  bottom: -13px;
+  display: none;
+  height: 26px;
+  left: 500px;
+  padding: 0;
+  position: absolute;
+  width: 26px;
+}
+
 .Create .complete-dialog {
   background: rgba(0, 0, 0, 0.85);
   display: none;
@@ -251,20 +265,22 @@ header .add, header .remove {
   margin: 3em 0 2em;
 }
 
-.Create .complete-dialog .content input {
+.Create .complete-dialog .content input, .Create .complete-dialog .content textarea {
   border-radius: 10px;
   font-size: 18px;
   margin-bottom: 2em;
 }
 
-.Create .complete-dialog .content input[type=textarea] {
+.Create .complete-dialog .content textarea {
   height: 8em;
+  width: 100%;
 }
 
 .Create .complete-dialog .content input[type=submit] {
   background: #008fd5;
   border: 0;
   color: white;
+  cursor: pointer;
   float: right;
   font-size: 18px;
   padding: 1em 3em;

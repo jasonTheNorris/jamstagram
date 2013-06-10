@@ -38,9 +38,9 @@
 }
 
 .Instagram .photo-shield .controls {
-  background-image: url('/img/shield.png');
+  background-image: url('/img/hover_overlay.png');
   bottom: 0;
-  padding-bottom: 1em;
+  padding: 5em 0 1em;
   position: absolute;
   text-align: center;
   width: 100%;
@@ -49,6 +49,16 @@
 
 .Instagram .photo-shield .controls button {
   line-height: 1;
+}
+
+.Instagram .photo-shield .controls .select {
+  background-image: url('/img/icon_confirm.png');
+  background-repeat: no-repeat;
+  background-position: center center;
+  border: none;
+  height: 26px;
+  padding: 0;
+  width: 26px;
 }
 
 .Instagram .photo-shield .controls .nav {
