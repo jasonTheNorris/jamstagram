@@ -157,15 +157,18 @@ header .add, header .remove {
 
 /* Create */
 
+.View h2,
 .Create h2 {
   color: rgba(100, 100, 100, 0.8);
   margin: 1.5em auto;
 }
 
+.View h2 span,
 .Create h2 span {
   color: rgba(200, 200, 200, 0.8);
 }
 
+.View .side,
 .Create .step {
   box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
   display: inline-block;
@@ -177,12 +180,39 @@ header .add, header .remove {
   width: 32em;
 }
 
+.View .instagram {
+  background-size: cover;
+  background-repeat: no-repeat;
+  position: relative;
+}
+
+.View .instagram .play {
+  display: block;
+  background: url(/img/play_button.png);
+  width: 110px;
+  height: 110px;
+  margin: -55px 0 0 -55px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+}
+
+.View .rdio h2 {
+  margin: 1.5em auto 0.25em;
+}
+
+.View .rdio h3 {
+  color: rgba(200, 200, 200, 0.8);
+  margin: 0 auto 1.5em;
+}
+
 .Create .step.one {
   background-image: url('/img/ig_placeholder.png');
   background-size: 100%;
   background-color: lightgray;
 }
 
+.View .side,
 .Create .step.two {
   background-color: white;
 }
@@ -243,17 +273,17 @@ header .add, header .remove {
 }
 
 .Share .share-buttons .twitter {
-  background: url('../img/button_twitter.png') no-repeat;
+  background: url('/img/button_twitter.png') no-repeat;
   margin-right: .6em;
 }
 
 .Share .share-buttons .facebook {
-  background: url('../img/button_facebook.png') no-repeat;
+  background: url('/img/button_facebook.png') no-repeat;
   margin-right: .6em;
 }
 
 .Share .share-buttons .email {
-  background: url('../img/button_email.png') no-repeat;
+  background: url('/img/button_email.png') no-repeat;
 }
 
 .Share .share-buttons .email > a {

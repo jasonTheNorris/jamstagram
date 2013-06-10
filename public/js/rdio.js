@@ -18,6 +18,8 @@
       this.suggestions = new Backbone.Collection();
       this.model.on('add', this.onTrackAdded);
       this.model.on('change:index', this.onTrackReorder);
+
+      console.log(this.model);
     },
 
     render: function() {
@@ -35,6 +37,10 @@
       var songText = count === 1 ? 'song' : 'songs';
       this.$remaining.text(count + ' ' + songText + ' to go.');
     },
+
+    /* R.player.play({
+      source: "a171827"
+    }); */
 
     clearSearchResults: function() {
       this.suggestions.reset();

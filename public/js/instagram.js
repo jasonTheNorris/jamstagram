@@ -92,6 +92,7 @@
       this.$('.photo-shield .controls').fadeOut();
       this.$('.number').addClass('complete');
       this._complete = true;
+      this.trigger('complete');
     },
 
     onPhotoShieldRemoveClicked: function() {
