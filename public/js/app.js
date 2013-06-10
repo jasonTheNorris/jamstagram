@@ -107,6 +107,10 @@
     url: '/api/jamstagrams'
   });
 
+  J.Models.Jamstagram = Backbone.Model.extend({
+    url: '/api/p/123'
+  });
+
   // Views
   J.Views.Index = Backbone.View.extend({
     className: 'Index clearfix',
@@ -201,6 +205,20 @@
     }
   });
 
+  J.Views.View = Backbone.View.extend({
+    className: 'View clearfix',
+
+    initialize: function() {
+      console.warn(this.model);
+    },
+
+    render: function() {
+      J.app.setHeaderButtonState('add');
+      this.$el.html(J.Templates.view.render(this.model.toJSON()));
+      return this;
+    }
+  });
+
   // App
   J.App = function() {
     var self = this;
@@ -220,7 +238,19 @@
       routes: {
         '': 'index',
         'create': 'create',
+        'p/:id': 'view',
         'access_token=*token': 'instagram_auth'
+      },
+
+      view: function() {
+        var model = new J.Models.Jamstagram();
+        model.on('sync', function() {
+          var view = new J.Views.View({
+            model: model
+          });
+          self.renderContent(view);
+        });
+        model.fetch();
       },
 
       index: function() {
@@ -283,7 +313,9 @@
       self.router.navigate('', { trigger: true });
     });
 
-    Backbone.history.start();
+    Backbone.history.start({
+      pushState: true
+    });
   };
 
   J.App.prototype.renderContent = function(view) {
