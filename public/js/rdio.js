@@ -40,6 +40,7 @@
     },
 
     onSearchResults: function(response) {
+      console.log(response);
       this.clearSearchResults();
 
       this.suggestions.reset(response.result.slice(0, 5));

@@ -8,7 +8,7 @@
 .Rdio .clear {
   position: absolute;
   right: 3em;
-  top: 1em;
+  top: 0.6em;
   text-decoration: none;
   display: none;
 }
@@ -29,12 +29,21 @@
   overflow: scroll;
 }
 
+.Rdio .search,
+.Rdio .search:focus {
+  background: url('/img/icon_search.png') no-repeat 0.75em center;
+  padding: 0.75em 3em;
+}
+
 .Rdio .suggestions :last-child {
   border-bottom: none;
 }
 
 .Rdio.searching .clear {
   display: block;
+  width: 26px;
+  height: 26px;
+  background: url('/img/icon_close.png');
 }
 
 .Rdio.searching .suggestions {
