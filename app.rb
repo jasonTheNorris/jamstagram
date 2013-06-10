@@ -83,15 +83,15 @@ end
 get '/api/p/:id' do
   content_type :json
   jamstagram = {
-    src: '/img/ig_02.jpg',
-    title: 'Aerials',
-    creator: 'Jason Russell',
+    src: 'http://distilleryimage5.s3.amazonaws.com/d44d7652ac4311e2875a22000aaa0594_7.jpg',
+    title: 'Emo Night',
+    creator: 'Jason Norris',
     tracks: [
-      't3483470',
-      't30008578',
-      't30480048',
-      't2893111',
-      't19080916'
+      "t2491084",
+      "t3370025",
+      "t2276276",
+      "t1180038",
+      "t1786234"
     ]
   };
   jamstagram.to_json

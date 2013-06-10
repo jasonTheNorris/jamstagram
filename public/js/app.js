@@ -182,11 +182,12 @@
       // });
 
       // this.model.save();
+      J.app.router.navigate('/p/123', { trigger: true });
     },
 
     getDefaultText: function() {
       var username = this.instagram.model.get('user').username;
-      return 'photo by @' + username + ' — http://jasmstagr.am/1234';
+      return 'photo by @' + username + ' — http://local.jasmstagr.am/123';
     },
 
     showCompleteDialog: function() {
