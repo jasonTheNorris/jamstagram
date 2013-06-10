@@ -87,9 +87,9 @@ get '/api/p/:id' do
     title: 'Emo Night',
     creator: 'Jason Norris',
     tracks: [
+      "t2276276",
       "t2491084",
       "t3370025",
-      "t2276276",
       "t1180038",
       "t1786234"
     ]

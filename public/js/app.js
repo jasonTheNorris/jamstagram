@@ -156,38 +156,6 @@
       this.$('.step.one').append(this.instagram.render().el);
       this.$('.step.two').append(this.rdio.render().el);
       return this;
-    }
-  });
-
-  J.Views.View = Backbone.View.extend({
-    className: 'View clearfix',
-
-    events: {
-      'click .play': 'onPlayClicked'
-    },
-
-    initialize: function() {
-      _.bindAll(this);
-      this.model.on('change:tracks', this.onTracksLoaded);
-    },
-
-    onPlayClicked: function(e) {
-      e.preventDefault();
-      R.player.queue.clear();
-      _.each(this.model.get('tracks'), function(track) {
-        R.player.queue.add(track.key);
-      });
-      R.player.queue.play();
-    },
-
-    onTracksLoaded: function() {
-      _.each(this.model.get('tracks'), function(model) {
-        var child = new J.Views.Track({
-          playable: true,
-          model: new Backbone.Model(model)
-        });
-        this.$('.tracks').append(child.render().el);
-      }, this);
     },
 
     onStepComplete: function() {
@@ -241,14 +209,40 @@
   J.Views.View = Backbone.View.extend({
     className: 'View clearfix',
 
+    events: {
+      'click .play': 'onPlayClicked'
+    },
+
     initialize: function() {
-      console.warn(this.model);
+      _.bindAll(this);
+      this.model.on('change:tracks', this.onTracksLoaded);
     },
 
     render: function() {
-      J.app.setHeaderButtonState('add');
+      J.app.hideHeaderButtons();
       this.$el.html(J.Templates.view.render(this.model.toJSON()));
       return this;
+    },
+
+    onPlayClicked: function(e) {
+      e.preventDefault();
+      R.player.queue.clear();
+      var track = this.model.get('tracks')[0];
+      R.player.queue.add(track.key);
+      R.player.queue.play();
+    },
+
+    onTracksLoaded: function() {
+      var self = this;
+      _.each(this.model.get('tracks'), function(model) {
+        var child = new J.Views.Track({
+          playable: true,
+          model: new Backbone.Model(model)
+        });
+        setTimeout(function() {
+          self.$('.tracks').append(child.render().el);
+        }, 1000);
+      }, this);
     }
   });
 
