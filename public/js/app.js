@@ -167,11 +167,10 @@
           model: model
         });
 
-        model.on('reset', function() {
+        model.on('sync', function() {
           self.renderContent(view);
         });
         model.fetch();
-
         self.renderContent(view);
       },
 
