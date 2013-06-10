@@ -168,6 +168,15 @@ header .add, header .remove {
   color: rgba(200, 200, 200, 0.8);
 }
 
+.View .tracks {
+  border-top: 1px solid #e6e7e9;
+  margin: 2.2em 0 0;
+}
+
+.View .tracks .Track {
+  padding: 20.6px 15px;
+}
+
 .View .side,
 .Create .step {
   box-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
@@ -178,6 +187,10 @@ header .add, header .remove {
   position: relative;
   text-align: center;
   width: 32em;
+}
+
+.View .side {
+  padding: 0;
 }
 
 .View .instagram {
