@@ -46,6 +46,7 @@ body {
 }
 
 h1 {
+  cursor: pointer;
   font-size: 2.5em;
   font-weight: 300;
   letter-spacing: 2px;
@@ -196,6 +197,12 @@ header .add, header .remove {
   z-index: 2;
 }
 
+.Create .step .number.complete {
+  background-image: url('/img/icon_check_green_48.png');
+  background-size: 100%;
+  color: transparent;
+}
+
 .Create .step.one .instagram-results {
   height: 20em;
   margin-top: 1em;
@@ -227,13 +234,36 @@ header .add, header .remove {
 }
 
 .Create .step.one .photo-shield .controls {
-  bottom: 1em;
+  background-image: url('/img/shield.png');
+  bottom: 0;
+  padding-bottom: 1em;
   position: absolute;
   text-align: center;
   width: 100%;
   z-index: 2;
 }
-/* Share */
+
+.Create .step.one .photo-shield .controls button {
+  line-height: 1;
+}
+
+.Create .step.one .photo-shield .controls .nav {
+  background-position: center center;
+  height: 26px;
+  padding: 0;
+  position: absolute;
+  width: 26px;
+}
+
+.Create .step.one .photo-shield .controls .nav.next {
+  background-image: url('/img/icon_next.png');
+  right: 2.5em;
+}
+
+.Create .step.one .photo-shield .controls .nav.previous {
+  background-image: url('/img/icon_prev.png');
+  left: 2.5em;
+}/* Share */
 
 .Share {
   width: 100%;

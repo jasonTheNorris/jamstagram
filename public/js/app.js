@@ -76,7 +76,7 @@
       var authWindow = window.open(authUrl, 'instagramAuth', "height=650,width=650");
       $(J.app).one('auth:instagram', function() {
         authWindow.close();
-        deferred.resolve();        
+        deferred.resolve();
       });
     }
 
@@ -121,7 +121,9 @@
 
     events: {
       'keyup .instagram-search': 'onInstagramSearchKepUp',
-      'click .instagram-results img': 'onInstagramResultClicked'
+      'click .instagram-results img': 'onInstagramResultClicked',
+      'click .photo-shield .nav': 'onPhotoShieldNavClicked',
+      'click .photo-shield .select': 'onPhotoShieldSelectClicked'
     },
 
     initialize: function() {
@@ -182,15 +184,36 @@
     },
 
     onInstagramResultClicked: function(e) {
-      var index = $(e.currentTarget).attr('data-index');
-      var src = this.photos.at(index).get('images').standard_resolution.url;
+      this.currentPhotoIndex = $(e.currentTarget).attr('data-index');
       var $shield = this.$('.photo-shield');
       var $shieldImage = $shield.find('img');
       
       $shieldImage.one('load', function() {
         $shield.fadeIn();
       });
-      $shieldImage.attr('src', src);
+      
+      this.loadShieldPhoto();
+    },
+
+    onPhotoShieldNavClicked: function(e) {
+      if ($(e.currentTarget).is('.next')) {
+        if (this.currentPhotoIndex !== this.photos.length - 1) {
+          this.currentPhotoIndex++;
+        }
+      } else if (this.currentPhotoIndex !== 0) {
+        this.currentPhotoIndex--;
+      }
+      this.loadShieldPhoto();
+    },
+
+    loadShieldPhoto: function() {
+      var src = this.photos.at(this.currentPhotoIndex).get('images').standard_resolution.url;
+      this.$('.photo-shield img').attr('src', src);
+    },
+
+    onPhotoShieldSelectClicked: function() {
+      this.$('.photo-shield .controls').fadeOut();
+      this.$('.step.one .number').addClass('complete');
     }
 
   });
@@ -248,9 +271,14 @@
 
     this.router = new Router();
     
+    this.$titleHeader = $('h1');
     this.$headerAdd = $('header .add');
     this.$headerRemove = $('header .remove');
     this.$content = $('#content');
+
+    this.$titleHeader.click(function() {
+      self.router.navigate('', { trigger: true });
+    });
 
     this.$headerAdd.click(function() {
       if (!R.authenticated()) {
