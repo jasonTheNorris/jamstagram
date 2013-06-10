@@ -157,7 +157,6 @@
 
     onPlayClicked: function(e) {
       e.preventDefault();
-      console.warn(this.model.get('tracks'));
       R.player.queue.clear();
       _.each(this.model.get('tracks'), function(track) {
         R.player.queue.add(track.key);
