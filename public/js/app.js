@@ -119,6 +119,10 @@
   J.Views.Create = Backbone.View.extend({
     className: 'Create clearfix',
 
+    events: {
+      'click .complete-dialog .close': 'hideCompleteDialog'
+    },
+
     initialize: function() {
       this.instagram = new J.Views.Instagram({
         model: new Backbone.Model(),
@@ -128,6 +132,11 @@
         model: new Backbone.Collection(),
         el: this.$('.step.two').get(0)
       });
+
+      _.bindAll(this, 'onStepComplete');
+
+      this.instagram.on('complete', this.onStepComplete);
+      this.rdio.on('complete', this.onStepComplete);
     },
 
     render: function() {
@@ -137,6 +146,22 @@
       this.$('.step.two').append(this.rdio.render().el);
       return this;
     },
+
+    onStepComplete: function() {
+      if (this.rdio.isComplete() && this.instagram.isComplete()) {
+        this.showCompleteDialog();
+      }
+    },
+
+    showCompleteDialog: function() {
+      this.$('.step .number').fadeOut();
+      this.$('.complete-dialog').fadeIn();
+    },
+
+    hideCompleteDialog: function() {
+      this.$('.complete-dialog').fadeOut();
+      this.$('.step .number').fadeIn();
+    }
   });
 
   // App

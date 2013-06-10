@@ -60,7 +60,10 @@ h2 {
   font-size: 1.3em;
 }
 
-input[type=text], input[type=text]:focus {
+input[type=text],
+input[type=text]:focus,
+input[type=textarea],
+input[type=textarea]:focus {
   border: 1px solid rgba(200, 200, 200, 0.8);
   border-radius: 2em;
   color: rgba(150, 150, 150, 0.8);
@@ -128,6 +131,10 @@ header .add, header .remove {
   position: absolute;
   right: 0;
   top: 0em;
+}
+
+#content {
+  position: relative;
 }
 
 /* Index */
@@ -202,6 +209,65 @@ header .add, header .remove {
   background-image: url('/img/icon_check_green_48.png');
   background-size: 100%;
   color: transparent;
+}
+
+.Create .complete-dialog {
+  background: rgba(0, 0, 0, 0.85);
+  display: none;
+  height: 100%;
+  position: absolute;
+  text-align: center;
+  width: 100%;
+  z-index: 3;
+}
+
+.Create .complete-dialog .check {
+  background-image: url('/img/icon_check_green_48.png');
+  background-size: 100%;
+  height: 48px;
+  left: 488px;
+  position: absolute;
+  top: -24px;
+  width: 48px;
+}
+
+.Create .complete-dialog .close {
+  border: 0;
+  box-shadow: none;
+  color: white;
+  font-size: 14px;
+  position: absolute;
+  right: 0;
+  top: 0.6em;
+}
+
+.Create .complete-dialog .content {
+  margin: 0 auto;
+  width: 60%;
+}
+
+.Create .complete-dialog .content h2 {
+  color: white;
+  margin: 3em 0 2em;
+}
+
+.Create .complete-dialog .content input {
+  border-radius: 10px;
+  font-size: 18px;
+  margin-bottom: 2em;
+}
+
+.Create .complete-dialog .content input[type=textarea] {
+  height: 8em;
+}
+
+.Create .complete-dialog .content input[type=submit] {
+  background: #008fd5;
+  border: 0;
+  color: white;
+  float: right;
+  font-size: 18px;
+  padding: 1em 3em;
 }
 
 /* Share */

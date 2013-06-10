@@ -44,6 +44,7 @@
     },
 
     onSearchResults: function(response) {
+      console.log(response);
       this.clearSearchResults();
 
       this.suggestions.reset(response.result.slice(0, 5));
@@ -121,7 +122,7 @@
     },
 
     isComplete: function() {
-      return this._complete();
+      return this._complete;
     },
 
     onTrackSelected: function(track) {

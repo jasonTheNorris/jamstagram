@@ -39,7 +39,7 @@
     },
 
     onDragStart: function(e) {
-      // e.originalEvent.dataTransfer.effectAllowed = 'move';
+      e.originalEvent.dataTransfer.effectAllowed = 'move';
       e.originalEvent.dataTransfer.setData('index', this.model.get('index'));
       this.$el.addClass('dragging');
     },
@@ -51,12 +51,13 @@
     initialize: function(options) {
       _.bindAll(this);
 
-      if ('draggable' in this.el) {
-        this.$el.attr('draggable', true);
-        this.$el.addClass('draggable');
-      }
       if (options.selected) {
         this.$el.addClass('selected');
+
+        if ('draggable' in this.el) {
+          this.$el.attr('draggable', true);
+          this.$el.addClass('draggable');
+        }
       }
     },
 
