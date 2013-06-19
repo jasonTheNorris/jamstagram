@@ -38,10 +38,6 @@
       this.$remaining.text(count + ' ' + songText + ' to go.');
     },
 
-    /* R.player.play({
-      source: "a171827"
-    }); */
-
     clearSearchResults: function() {
       this.suggestions.reset();
       _.each(this.suggestionViews, function(child) {

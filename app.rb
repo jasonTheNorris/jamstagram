@@ -14,6 +14,10 @@ get '/api/templates' do
   templates.to_json
 end
 
+post '/api/jamstagram' do
+  debugger
+end
+
 get '/api/jamstagrams' do
   content_type :json
   jamstagrams = [{

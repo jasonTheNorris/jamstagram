@@ -108,7 +108,7 @@
   });
 
   J.Models.Jamstagram = Backbone.Model.extend({
-    url: '/api/p/123'
+    url: '/api/jamstagram'
   });
 
   // Views
@@ -171,18 +171,18 @@
       var photo = this.instagram.model;
       var tracks = this.rdio.model;
 
-      // this.model.set({
-      //   userId: photo.get('user').id + '+' + R.currentUser.get('key'),
-      //   userName: R.currentUser.get('firstName') + ' ' + R.currentUser.get('lastName'),
-      //   userInstagramName: photo.get('user').username,
-      //   name: $form.find('[name=name]').val(),
-      //   description: $form.find('[name=description]').val(),
-      //   photoSrc: photo.get('images').standard_resolution.url,
-      //   trackKeys: tracks.pick('key')
-      // });
+      this.model.set({
+        userId: photo.get('user').id + '+' + R.currentUser.get('key'),
+        userName: R.currentUser.get('firstName') + ' ' + R.currentUser.get('lastName'),
+        userInstagramName: photo.get('user').username,
+        name: $form.find('[name=name]').val(),
+        description: $form.find('[name=description]').val(),
+        photoSrc: photo.get('images').standard_resolution.url,
+        trackKeys: tracks.pluck('key')
+      });
 
-      // this.model.save();
-      J.app.router.navigate('/p/123', { trigger: true });
+      this.model.save();
+      // J.app.router.navigate('/p/123', { trigger: true });
     },
 
     getDefaultText: function() {
@@ -211,11 +211,6 @@
 
     events: {
       'click .play': 'onPlayClicked'
-    },
-
-    initialize: function() {
-      _.bindAll(this);
-      this.model.on('change:tracks', this.onTracksLoaded);
     },
 
     render: function() {
@@ -273,6 +268,9 @@
         var model = new J.Models.Jamstagram();
         model.on('sync', function() {
           var keys = model.get('tracks');
+          var view = new J.Views.View({
+            model: model
+          });
           R.request({
             method: 'get',
             content: {
@@ -280,10 +278,8 @@
             },
             success: function(response) {
               model.set('tracks', _.values(response.result));
+              view.onTracksLoaded();
             }
-          });
-          var view = new J.Views.View({
-            model: model
           });
           self.renderContent(view);
         });
