@@ -1,5 +1,4 @@
 require 'rubygems'
-require 'debugger'
 require 'sinatra'
 require 'json'
 require 'rdio'
